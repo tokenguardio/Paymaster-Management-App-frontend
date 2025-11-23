@@ -19,7 +19,6 @@ export class PolicyRuleService {
     const whereClause: Prisma.PolicyRuleWhereInput = {
       policy_id: BigInt(policyId),
     };
-    // const whereClause: any = { policy_id: BigInt(policyId) };
 
     if (onlyActive) {
       whereClause.OR = [{ valid_to: null }, { valid_to: { gt: now } }];

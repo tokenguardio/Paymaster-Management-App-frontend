@@ -18,7 +18,7 @@ type TGeneralAccordionProps = {
 };
 
 export const GeneralAccordion = ({ control, errors, setValue }: TGeneralAccordionProps) => {
-  const [policyNotExpired, setPolicyNotExpired] = useState<boolean>(false);
+  const [policyNotExpired, setPolicyNotExpired] = useState<boolean>(true);
 
   const handlePolicyChange = () => {
     setPolicyNotExpired((prevState) => {
@@ -40,7 +40,6 @@ export const GeneralAccordion = ({ control, errors, setValue }: TGeneralAccordio
             <TextInput
               {...field}
               label="Maximum budget in ETH"
-              // className="mt8"
               name="max_budget_wei"
               fullWidth
               error={errors.max_budget_wei?.message}
@@ -81,6 +80,8 @@ export const GeneralAccordion = ({ control, errors, setValue }: TGeneralAccordio
                 maxDate={control._formValues.valid_to || undefined}
                 fullWidth
                 calendarIcon={<Icon width="14" height="16" name="calendar" color="gray900" />}
+                showLeadingZeros
+                format="yyyy-MM-dd"
               />
             )}
           />
@@ -96,6 +97,8 @@ export const GeneralAccordion = ({ control, errors, setValue }: TGeneralAccordio
                 onChange={field.onChange}
                 fullWidth
                 disabled={policyNotExpired}
+                showLeadingZeros
+                format="yyyy-MM-dd"
               />
             )}
           />

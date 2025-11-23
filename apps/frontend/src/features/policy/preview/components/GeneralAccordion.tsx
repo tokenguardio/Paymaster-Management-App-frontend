@@ -33,6 +33,8 @@ export const GeneralAccordion = ({ policy }: TGeneralAccordionProps) => (
           disabled
           calendarIcon={false}
           clearIcon={false}
+          showLeadingZeros
+          format="yyyy-MM-dd"
         />
         <DatePicker
           label="End Date"
@@ -40,6 +42,8 @@ export const GeneralAccordion = ({ policy }: TGeneralAccordionProps) => (
           disabled
           fullWidth
           clearIcon={false}
+          showLeadingZeros
+          format="yyyy-MM-dd"
         />
       </div>
     </div>

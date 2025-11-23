@@ -21,7 +21,8 @@
 
 .react-date-picker--disabled .react-date-picker__inputGroup__month,
 .react-date-picker__inputGroup__day,
-.react-date-picker__inputGroup__year {
+.react-date-picker__inputGroup__year,
+.react-date-picker__inputGroup__input--hasLeadingZero {
   background-color: none !important;
   border: none !important;
   color: none !important;

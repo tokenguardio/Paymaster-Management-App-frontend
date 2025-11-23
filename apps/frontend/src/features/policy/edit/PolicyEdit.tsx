@@ -1,7 +1,6 @@
 import React from 'react';
 import { PaymasterEditSettings } from './components/PaymasterEditSettings';
 import Style from './PolicyEdit.module.css';
-import { NoDataInfoBox } from '../common/components/NoDataInfoBox';
 import { PaymasterView } from '../common/components/PaymasterView';
 
 export const PolicyEdit = () => {
