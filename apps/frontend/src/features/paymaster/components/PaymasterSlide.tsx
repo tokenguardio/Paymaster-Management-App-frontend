@@ -1,6 +1,6 @@
 import React from 'react';
 import noDataChartInfo from '@/assets/images/no-data-chart.png';
-import { EChart, Badge, Card, Dropdown, Icon, Typography } from '@/components';
+import { EChart, Badge, Card, Dropdown, Icon, Typography, Loader } from '@/components';
 import { usePolicyData } from '@/hooks/usePolicyData';
 import { TDropdownOption } from '@/types/dropdownOption';
 import { getAreaChartOption } from '@/utils/helpers';
@@ -13,7 +13,7 @@ interface IPaymasterSlideProps {
 }
 
 export const PaymasterSlide: React.FC<IPaymasterSlideProps> = ({ id, title, options }) => {
-  const { policyData } = usePolicyData(id);
+  const { policyData, isLoadingPolicyData } = usePolicyData(id);
 
   const option = getAreaChartOption({
     data: policyData,
@@ -43,10 +43,26 @@ export const PaymasterSlide: React.FC<IPaymasterSlideProps> = ({ id, title, opti
             </div>
           ) : null}
         </div>
-        {policyData ? (
-          <EChart option={option} />
-        ) : (
+        {policyData && !isLoadingPolicyData && (
+          <>
+            <Typography
+              size="xs"
+              weight="regular"
+              text="Number of UserOps"
+              tag="p"
+              color="primary500"
+              align="center"
+            />
+            <EChart option={option} />
+          </>
+        )}
+        {!policyData && !isLoadingPolicyData && (
           <img src={noDataChartInfo} height={300} alt="no chart data information" />
+        )}
+        {isLoadingPolicyData && (
+          <div className="relative min-height">
+            <Loader />
+          </div>
         )}
       </Card>
     </section>

@@ -160,7 +160,7 @@ export const PaymasterSettings = () => {
       is_public: true,
       status_id: 'ACTIVE',
       valid_from: new Date(),
-      valid_to: new Date(),
+      valid_to: null,
       whitelisted_addresses: true,
       rules: [],
     },

@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { TChartDataPoint } from '@/types/chart';
-import { PolicyDataSchema } from '@/types/policyData';
+import { _PolicyDataSchema } from '@/types/policyData';
 import { fetchPolicyData } from '@/utils/fetches';
 import { _getValidationErrorMessage } from '@/utils/helpers';
 import { _logger } from '@/utils/logger';

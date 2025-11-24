@@ -58,7 +58,7 @@ export const PreviewPolicyRulesAccordion = ({ policyRules }: TPreviewPolicyRules
       {policyRules.length === 0 ? (
         <Typography
           tag="p"
-          text="Policy doesn't have rules."
+          text="Policy doesn't have active rules."
           size="s"
           style="italic"
           weight="regular"

@@ -1,5 +1,19 @@
-import { EChartsOption } from 'echarts';
+import {
+  EChartsOption,
+  SeriesOption,
+  XAXisComponentOption,
+  YAXisComponentOption,
+  TooltipComponentOption,
+  MarkAreaComponentOption,
+  MarkPointComponentOption,
+  MarkLineComponentOption,
+  TitleComponentOption,
+  LegendComponentOption,
+  ToolboxComponentOption,
+  DataZoomComponentOption,
+} from 'echarts';
 import { TChartDataPoint, TChartResult } from '@/types/chart';
+import { palette } from '@/utils/constans';
 import { POLICY_RULE_CONSTRAINTS } from '@/utils/policyRuleConstraints';
 
 type TSeriesData = {
@@ -9,9 +23,14 @@ type TSeriesData = {
 
 interface IAreaChartOptionsParams {
   data: Array<TSeriesData>;
-  toolbox?: boolean;
-  dataZoom?: boolean;
-  legend?: boolean;
+  title?: TitleComponentOption;
+  toolbox?: boolean | ToolboxComponentOption;
+  dataZoom?: boolean | DataZoomComponentOption | DataZoomComponentOption[];
+  legend?: boolean | LegendComponentOption;
+  markArea?: MarkAreaComponentOption;
+  markPoint?: MarkPointComponentOption;
+  markLine?: MarkLineComponentOption;
+  tooltip?: TooltipComponentOption;
 }
 
 export const getValidationErrorMessage = (data: string) => {
@@ -64,6 +83,28 @@ export const determineChartDataFormat = (data: TChartDataPoint[]): TChartResult 
   }
 };
 
+export function getComparatorSymbol(name: string) {
+  switch (name) {
+    case 'Less Than or Equal':
+      return '<=';
+    case 'Greater Than or Equal':
+      return '>=';
+    case 'Equal':
+      return '=';
+    case 'Less Than':
+      return '<';
+    case 'Greater Than':
+      return '>';
+    default:
+      return '';
+  }
+}
+
+export function shortenAddress(address: string, length: number = 4): string {
+  if (!address || address.length < length * 2 + 2) return address;
+  return `${address.slice(0, length + 2)}...${address.slice(-length)}`;
+}
+
 export const convertDataToSingleLineFormat = (
   data: TChartDataPoint[],
   metric: string,
@@ -77,10 +118,15 @@ export const convertDataToSingleLineFormat = (
 };
 
 export const getAreaChartOption = ({
+  title = {},
   data,
   toolbox = true,
   dataZoom = true,
   legend = true,
+  markArea = {},
+  markPoint = {},
+  markLine = {},
+  tooltip = { trigger: 'axis' },
 }: IAreaChartOptionsParams): EChartsOption => {
   if (!data?.length) return {};
 
@@ -88,25 +134,52 @@ export const getAreaChartOption = ({
   if (!metricKey) return {};
 
   return {
-    tooltip: { trigger: 'axis' },
+    title: title,
+    tooltip: tooltip,
     legend: legend ? {} : undefined,
     toolbox: toolbox ? { feature: { saveAsImage: {} } } : undefined,
     dataZoom: dataZoom ? [{ type: 'slider' }] : undefined,
     xAxis: {
       type: 'category',
       data: data.map((d) => d.date),
+      boundaryGap: false,
+      axisLabel: {
+        margin: 10,
+        color: palette.gray600,
+      },
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: true,
+        lineStyle: {
+          color: palette.gray200,
+        },
+      },
     },
     yAxis: {
       type: 'value',
+      splitNumber: 5,
       minInterval: 1,
     },
     series: [
       {
         name: metricKey,
         type: 'line',
+        symbol: 'none',
+        lineStyle: {
+          color: palette.green500,
+          width: 5,
+        },
+        itemStyle: {
+          color: palette.green500,
+        },
         smooth: true,
-        areaStyle: {},
+        areaStyle: undefined,
         data: data.map((d) => d[metricKey]),
+        markArea: markArea,
+        markPoint: markPoint,
+        markLine: markLine,
       },
     ],
   };
@@ -137,4 +210,15 @@ export const getAllowedOptions = (
   });
 
   return Array.from(allowed);
+};
+
+export const toDateOnly = (iso: string | null | undefined): string => {
+  if (!iso) return '';
+  return iso.split('T')[0];
+};
+
+export const todayISO = new Date().toISOString().split('T')[0];
+
+export const isDateInRange = (date: string, from: string, to: string) => {
+  return date >= from && date <= to;
 };

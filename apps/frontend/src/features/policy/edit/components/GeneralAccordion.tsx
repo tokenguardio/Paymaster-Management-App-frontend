@@ -72,26 +72,43 @@ export const GeneralAccordion = ({ control, errors, setValue }: TGeneralAccordio
                 label="Start Date"
                 value={field.value}
                 maxDate={control._formValues.valid_to || undefined}
+                disabled
+                clearIcon={false}
                 onChange={field.onChange}
                 fullWidth
                 calendarIcon={<Icon width="14" height="16" name="calendar" color="gray900" />}
+                showLeadingZeros
+                format="yyyy-MM-dd"
               />
             )}
           />
           <Controller
             name="valid_to"
             control={control}
-            render={({ field }) => (
-              <DatePicker
-                {...field}
-                label="End Date"
-                value={!policyNotExpired ? field.value : ''}
-                maxDate={control._formValues.valid_to || undefined}
-                onChange={field.onChange}
-                fullWidth
-                disabled={policyNotExpired}
-              />
-            )}
+            render={({ field }) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+
+              const validFrom = control._formValues.valid_from
+                ? new Date(control._formValues.valid_from)
+                : null;
+
+              const minDate = validFrom && validFrom > today ? validFrom : today;
+
+              return (
+                <DatePicker
+                  {...field}
+                  label="End Date"
+                  value={!policyNotExpired ? field.value : ''}
+                  minDate={minDate}
+                  onChange={field.onChange}
+                  fullWidth
+                  disabled={policyNotExpired}
+                  showLeadingZeros
+                  format="yyyy-MM-dd"
+                />
+              );
+            }}
           />
         </div>
         <Checkbox
